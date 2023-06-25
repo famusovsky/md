@@ -35,3 +35,5 @@ func main() {
 
 	errorLog.Fatal(err)
 }
+
+// TODO handle database
