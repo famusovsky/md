@@ -1,0 +1,18 @@
+{{template "base" .}}
+
+{{define "title"}}Note #{{.Note.ID}}{{end}}
+
+{{define "main"}}
+{{with .Note}}
+<div class='note'>
+    <main>
+        <pre>{{.Content}}</pre>
+    </main>
+
+    <div class='metadata'>
+        <time>Created: {{.Created.Format "2006-01-02"}}</time>
+        <time>Expires: {{.Expires.Format "2006-01-02"}}</time>
+    </div>
+</div>
+{{end}}
+{{end}}

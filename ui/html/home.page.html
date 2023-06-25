@@ -3,5 +3,19 @@
 {{define "title"}}Home page{{end}}
 
 {{define "main"}}
-<p>Пока здесь ничего нет!</p>
+<div class='newnote'>
+    <form method="POST">
+        <textarea name="text" placeholder="Hello World!" required ></textarea>
+        <br>
+        <label>Time till the note expires:</label>
+        <select name="days" required>
+            <option value="1">Day</option>
+            <option value="7">Week</option>
+            <option value="30">Month</option>
+            <option value="365">Year</option>
+        </select>
+        <br>
+        <input type="submit" value="Create" />
+    </form>
+</div>
 {{end}}

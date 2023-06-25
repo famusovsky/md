@@ -1,10 +1,15 @@
 package models
 
-import "time"
+import (
+	"errors"
+	"time"
+)
 
-type note struct {
-	ID      int64
-	Text    string
+var ErrNoRecord = errors.New("models: record is not found")
+
+type Note struct {
+	ID      int
+	Content string
 	Created time.Time
-	Expired time.Time
+	Expires time.Time
 }
