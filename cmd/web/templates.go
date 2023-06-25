@@ -8,7 +8,8 @@ import (
 )
 
 type templateData struct {
-	Note *models.Note
+	Note         *models.Note
+	RenderedNote string
 }
 
 func createNewTemplatesCache(dir string) (map[string]*template.Template, error) {

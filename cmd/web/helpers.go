@@ -28,6 +28,10 @@ func (app *application) render(w http.ResponseWriter, r *http.Request, name stri
 		return
 	}
 
+	tmpl := "{{define \"renderedNote\"}}\n" + td.RenderedNote + "\n{{end}}"
+
+	ts.Parse(tmpl)
+
 	err := ts.Execute(w, td)
 	if err != nil {
 		app.serverError(w, err)

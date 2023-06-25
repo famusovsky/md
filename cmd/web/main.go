@@ -20,7 +20,7 @@ type application struct {
 }
 
 func main() {
-	addr := flag.String("addr", ":8080", "HTTP address")
+	addr := flag.String("addr", ":1488", "HTTP address")
 	dsn := flag.String("dsn", "port=5432 user=postgres password=qwerty dbname=MD sslmode=disable", "PostgreSQL input string")
 	flag.Parse()
 

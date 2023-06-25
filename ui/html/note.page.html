@@ -5,8 +5,18 @@
 {{define "main"}}
 {{with .Note}}
 <div class='note'>
-    <main>
-        <pre>{{.Content}}</pre>
+    <button id='toggleButton' onclick='toggleContent()'>Pure Text</button>
+    <main id='renderedContent' style='display: block;'>
+        <div class='markdown-body'>
+            {{template "renderedNote" .}}
+        </div>
+    </main>
+    <main id='pureContent' style='display: none;'>
+        <div class='pure-body'>
+            <pre>
+                <p>{{.Content}}</p>
+            </pre>
+        </div>
     </main>
 
     <div class='metadata'>
@@ -14,5 +24,23 @@
         <time>Expires: {{.Expires.Format "2006-01-02"}}</time>
     </div>
 </div>
+
+<script>
+    function toggleContent() {
+        var renderedContent = document.getElementById('renderedContent');
+        var pureContent = document.getElementById('pureContent');
+        var button = document.getElementById('toggleButton');
+
+        if (renderedContent.style.display === 'none') {
+            renderedContent.style.display = 'block';
+            pureContent.style.display = 'none';
+            button.textContent = 'Pure Text';
+        } else {
+            renderedContent.style.display = 'none';
+            pureContent.style.display = 'block';
+            button.textContent = 'Rendered MD';
+        }
+    }
+</script>
 {{end}}
 {{end}}
