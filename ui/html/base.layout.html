@@ -1,0 +1,22 @@
+{{define "base"}}
+<!doctype html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8'>
+    <title>{{template "title" .}} - md</title>
+    <link rel='stylesheet' href='/static/css/main.css'>
+    <link rel='shortcut icon' href='/static/img/favicon.ico' type='image/x-icon'>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto|Arial|sans-serif'>
+</head>
+<body>
+    <nav>
+        <a href='/'>Create new note</a>
+    </nav>
+    <main>
+        {{template "main" .}}
+    </main>
+    {{template "footer" .}}
+    <!-- <script src="/static/js/main.js" type="text/javascript"></script> -->
+</body>
+</html>
+{{end}}

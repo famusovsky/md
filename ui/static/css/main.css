@@ -1,0 +1,94 @@
+/* XXX created with ChatGPT */
+
+/* Google Material Design Colors */
+:root {
+    --primary-color: #2196F3;
+    --secondary-color: #9E9E9E;
+    --background-color: #F5F5F5;
+  }
+  
+  /* Base Styles */
+  body {
+    font-family: Roboto, Arial, sans-serif;
+    background-color: var(--background-color);
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+  }
+  
+  /* Buttons */
+  .button {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: #FFF;
+  }
+  
+  .button-primary {
+    background-color: var(--primary-color);
+  }
+  
+  .button-secondary {
+    background-color: var(--secondary-color);
+  }
+  
+  /* Cards */
+  .card {
+    background-color: #FFF;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .card-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .card-content {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  
+  /* Forms */
+  .input-group {
+    margin-bottom: 20px;
+  }
+  
+  .label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .input {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #CCC;
+    font-size: 16px;
+  }
+  
+  /* Typography */
+  p {
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+  
