@@ -7,15 +7,67 @@ import (
 	"github.com/famusovsky/md/pkg/models"
 )
 
-type NoteModel struct {
+type NotesModel struct {
 	db *sql.DB
 }
 
-func GetNoteModel(db *sql.DB) *NoteModel {
-	return &NoteModel{db}
+func GetNotesModel(db *sql.DB) (*NotesModel, error) {
+	err := checkDB(db)
+	if err != nil {
+		return nil, err
+	}
+
+	return &NotesModel{db}, nil
 }
 
-func (m *NoteModel) Get(id int) (*models.Note, error) {
+func checkDB(db *sql.DB) error {
+	q :=
+		`SELECT EXISTS (
+		SELECT 1
+		FROM information_schema.tables
+		WHERE table_schema = 'public'
+		AND table_name = 'notes'
+	 	);`
+	var exists bool
+	db.QueryRow(q).Scan(&exists)
+
+	if !exists {
+		q =
+			`CREATE TABLE notes (
+			id SERIAL NOT NULL PRIMARY KEY, 
+			content TEXT NOT NULL,
+			created TIMESTAMP NOT NULL,
+			expires TIMESTAMP NOT NULL
+		);`
+
+		_, err := db.Exec(q)
+		if err != nil {
+			return err
+		}
+	} else {
+		q =
+			`SELECT COUNT(*) = 4 AS proper
+			FROM information_schema.columns
+			WHERE table_schema = 'public'
+			AND table_name = 'notes'
+			AND (
+				(column_name = 'id' AND data_type = 'integer')
+				OR (column_name = 'content' AND data_type = 'text')
+				OR (column_name = 'created' AND data_type = 'timestamp without time zone')
+				OR (column_name = 'expires' AND data_type = 'timestamp without time zone')
+			);`
+		var proper bool
+		db.QueryRow(q).Scan(&proper)
+
+		if !proper {
+			return errors.New("incorrect 'notes' table in the database")
+		}
+	}
+
+	return nil
+}
+
+func (m *NotesModel) Get(id int) (*models.Note, error) {
 	q :=
 		`SELECT Content, Created, Expires FROM notes 
 		WHERE id = $1 AND expires > CURRENT_TIMESTAMP;`
@@ -33,7 +85,7 @@ func (m *NoteModel) Get(id int) (*models.Note, error) {
 	return note, nil
 }
 
-func (m *NoteModel) Add(text string, daysTillExpire int) (int, error) {
+func (m *NotesModel) Add(text string, daysTillExpire int) (int, error) {
 	q :=
 		`INSERT INTO notes (content, created, expires) VALUES (
 		$1,
@@ -48,4 +100,41 @@ func (m *NoteModel) Add(text string, daysTillExpire int) (int, error) {
 	}
 
 	return id, nil
+}
+
+func (m *NotesModel) delete(id int) error {
+	q :=
+		`DELETE FROM notes
+		WHERE id = $1;`
+
+	_, err := m.db.Exec(q, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *NotesModel) Tidy() error {
+	q :=
+		`SELECT id FROM notes
+		WHERE expires < CURRENT_TIMESTAMP;
+	`
+	rows, err := m.db.Query(q)
+	if err != nil {
+		return nil
+	}
+	for rows.Next() {
+		var id int
+		err = rows.Scan(&id)
+		if err != nil {
+			return err
+		}
+		err = m.delete(id)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

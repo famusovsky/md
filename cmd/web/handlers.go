@@ -37,7 +37,7 @@ func (app *application) showNote(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	note, err := app.notes.Get(id)
+	note, err := app.notesModel.Get(id)
 	if err != nil {
 		if errors.Is(err, models.ErrNoRecord) {
 			app.notFound(w)
@@ -68,7 +68,7 @@ func (app *application) createNote(w http.ResponseWriter, r *http.Request) {
 		app.serverError(w, err)
 		return
 	}
-	id, err := app.notes.Add(t, d)
+	id, err := app.notesModel.Add(t, d)
 	if err != nil {
 		app.serverError(w, err)
 		return

@@ -1,5 +1,9 @@
 package main
 
+// TODO add tests
+
+// TODO add normal link shortaning, not just note?id=smth
+
 import (
 	"database/sql"
 	"flag"
@@ -7,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/famusovsky/md/pkg/models/postgres"
 	_ "github.com/lib/pq"
@@ -15,7 +20,7 @@ import (
 type application struct {
 	infoLog       *log.Logger
 	errorLog      *log.Logger
-	notes         *postgres.NoteModel
+	notesModel    *postgres.NotesModel
 	templateCache map[string]*template.Template
 }
 
@@ -40,12 +45,30 @@ func main() {
 
 	infoLog.Println("templates cache is created")
 
+	model, err := postgres.GetNotesModel(db)
+	if err != nil {
+		errorLog.Fatal(err)
+	}
+
 	app := &application{
 		infoLog:       infoLog,
 		errorLog:      errorLog,
-		notes:         postgres.GetNoteModel(db),
+		notesModel:    model,
 		templateCache: cache,
 	}
+
+	go func(app *application) {
+		for {
+			err := app.notesModel.Tidy()
+			if err != nil {
+				app.errorLog.Println(err)
+			} else {
+				app.infoLog.Println("data get tidied successfully")
+			}
+
+			time.Sleep(12 * time.Hour)
+		}
+	}(app)
 
 	srvr := &http.Server{
 		Addr:     *addr,
@@ -68,5 +91,6 @@ func openDB(dsn string) (*sql.DB, error) {
 	if err = db.Ping(); err != nil {
 		return nil, err
 	}
+
 	return db, nil
 }
