@@ -1,5 +1,7 @@
 {{template "base" .}}
 
+<!-- TODO add copy link button -->
+
 {{define "title"}}Note #{{.Note.ID}}{{end}}
 
 {{define "main"}}
@@ -20,8 +22,7 @@
     </main>
 
     <div class='metadata'>
-        <time>Created: {{.Created.Format "2006-01-02"}}</time>
-        <time>Expires: {{.Expires.Format "2006-01-02"}}</time>
+        <time>Created: {{.Created.Format "02-01-2006"}}</time> | <time>Expires: {{.Expires.Format "02-01-2006"}}</time>
     </div>
 </div>
 
