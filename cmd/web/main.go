@@ -4,6 +4,8 @@ package main
 
 // TODO add normal link shortaning, not just note?id=smth
 
+// FIXME hyperlinks in mad between titles do not work
+
 import (
 	"database/sql"
 	"flag"

@@ -8,6 +8,7 @@
 {{with .Note}}
 <div class='note'>
     <button id='toggleButton' onclick='toggleContent()'>Pure Text</button>
+    <br><br>
     <main id='renderedContent' style='display: block;'>
         <div class='markdown-body'>
             {{template "renderedNote" .}}
@@ -20,7 +21,7 @@
             </pre>
         </div>
     </main>
-
+    <br>
     <div class='metadata'>
         <time>Created: {{.Created.Format "02-01-2006"}}</time> | <time>Expires: {{.Expires.Format "02-01-2006"}}</time>
     </div>
