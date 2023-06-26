@@ -4,11 +4,9 @@ import (
 	"errors"
 	"net/http"
 	"net/url"
-	"regexp"
 	"strconv"
 
 	"github.com/famusovsky/md/pkg/models"
-	"github.com/microcosm-cc/bluemonday"
 	"github.com/shurcooL/github_flavored_markdown"
 )
 
@@ -48,9 +46,10 @@ func (app *application) showNote(w http.ResponseWriter, r *http.Request) {
 	}
 
 	unsafe := github_flavored_markdown.Markdown([]byte(note.Content))
-	p := bluemonday.UGCPolicy()
-	p.AllowAttrs("class").Matching(regexp.MustCompile("^language-[a-zA-Z0-9]+$")).OnElements("code")
-	rendered := string(p.SanitizeBytes(unsafe))
+	// p := bluemonday.UGCPolicy()
+	// p.AllowAttrs("class").Matching(regexp.MustCompile("^language-[a-zA-Z0-9]+$")).OnElements("code")
+	// rendered := string(p.SanitizeBytes(unsafe))
+	rendered := string(unsafe)
 
 	app.render(w, r, "note.page.html", &templateData{Note: note, RenderedNote: rendered})
 }
