@@ -31,7 +31,8 @@ func (app *application) showNote(w http.ResponseWriter, r *http.Request) {
 	note, err := app.notesModel.Get(id)
 	if err != nil {
 		if errors.Is(err, models.ErrNoRecord) {
-			app.notFound(w)
+			// app.notFound(w)
+			app.home(w, r)
 		} else {
 			app.serverError(w, err)
 		}

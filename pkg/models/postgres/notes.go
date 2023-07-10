@@ -21,12 +21,12 @@ func GetNotesModel(db *sql.DB) (*NotesModel, error) {
 	return &NotesModel{db}, nil
 }
 
-func checkDB(db *sql.DB) error {
-	q := `CREATE TABLE IF NOT EXISTS notes (
-        id SERIAL PRIMARY KEY,
-        title TEXT NOT NULL,
-        content TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT NOW()
+func createDB(db *sql.DB) error {
+	q := `CREATE TABLE notes (
+        id SERIAL NOT NULL PRIMARY KEY, 
+		content TEXT NOT NULL,
+		created TIMESTAMP NOT NULL,
+		expires TIMESTAMP NOT NULL
     );`
 
 	_, err := db.Exec(q)
@@ -34,7 +34,11 @@ func checkDB(db *sql.DB) error {
 		log.Fatal(err)
 	}
 
-	q =
+	return nil
+}
+
+func checkDB(db *sql.DB) error {
+	q :=
 		`SELECT COUNT(*) = 4 AS proper
 			FROM information_schema.columns
 			WHERE table_schema = 'public'
@@ -49,7 +53,17 @@ func checkDB(db *sql.DB) error {
 	db.QueryRow(q).Scan(&proper)
 
 	if !proper {
-		return errors.New("incorrect 'notes' table in the database")
+		// TODO make normal migration
+		q = `DROP TABLE IF EXISTS notes`
+		_, err := db.Exec(q)
+		if err != nil {
+			return errors.New("cannot drop incorrect 'notes' table in the database")
+		}
+
+		err = createDB(db)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
