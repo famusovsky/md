@@ -4,10 +4,7 @@ package main
 
 // TODO add normal link shortaning, not just note?id=smth
 
-// FIXME hyperlinks in mad between titles do not work
-
 import (
-	"database/sql"
 	"flag"
 	"html/template"
 	"log"
@@ -15,6 +12,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/famusovsky/md/pkg/db"
 	"github.com/famusovsky/md/pkg/models/postgres"
 	_ "github.com/lib/pq"
 )
@@ -34,7 +32,7 @@ func main() {
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errorLog := log.New(os.Stdout, "ERR\t", log.Ldate|log.Ltime)
 
-	db, err := openDB(*dsn)
+	db, err := db.OpenDB(*dsn)
 	if err != nil {
 		errorLog.Fatal(err)
 	}
@@ -83,16 +81,4 @@ func main() {
 	err = srvr.ListenAndServe()
 
 	errorLog.Fatal(err)
-}
-
-func openDB(dsn string) (*sql.DB, error) {
-	db, err := sql.Open("postgres", dsn)
-	if err != nil {
-		return nil, err
-	}
-	if err = db.Ping(); err != nil {
-		return nil, err
-	}
-
-	return db, nil
 }

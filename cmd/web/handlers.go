@@ -29,6 +29,8 @@ func (app *application) showNote(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// TODO get id from body
+
 	id, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil {
 		app.serverError(w, err)
@@ -46,9 +48,6 @@ func (app *application) showNote(w http.ResponseWriter, r *http.Request) {
 	}
 
 	unsafe := github_flavored_markdown.Markdown([]byte(note.Content))
-	// p := bluemonday.UGCPolicy()
-	// p.AllowAttrs("class").Matching(regexp.MustCompile("^language-[a-zA-Z0-9]+$")).OnElements("code")
-	// rendered := string(p.SanitizeBytes(unsafe))
 	rendered := string(unsafe)
 
 	app.render(w, r, "note.page.html", &templateData{Note: note, RenderedNote: rendered})
