@@ -35,9 +35,9 @@ func Encrypt(id int) string {
 		id = id / alphabetLen
 	}
 
-	for len(result) < 5 {
-		result = string(alphabet[0]) + result
-	}
+	// for len(result) < 5 {
+	// 	result = string(alphabet[0]) + result
+	// }
 
 	return result
 }
