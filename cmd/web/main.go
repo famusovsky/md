@@ -32,11 +32,15 @@ func main() {
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errorLog := log.New(os.Stdout, "ERR\t", log.Ldate|log.Ltime)
 
-	db, err := db.OpenDB(*dsn)
+	dBase, err := db.OpenDB(*dsn)
 	if err != nil {
-		errorLog.Fatal(err)
+		dBase, err = db.OpenDB("")
+
+		if err != nil {
+			errorLog.Fatal(err)
+		}
 	}
-	defer db.Close()
+	defer dBase.Close()
 
 	cache, err := createNewTemplatesCache("ui/html/")
 	if err != nil {
@@ -45,7 +49,7 @@ func main() {
 
 	infoLog.Println("templates cache is created")
 
-	model, err := postgres.GetNotesModel(db)
+	model, err := postgres.GetNotesModel(dBase)
 	if err != nil {
 		errorLog.Fatal(err)
 	}
