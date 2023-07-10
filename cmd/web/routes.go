@@ -1,11 +1,18 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
 
-func (app *application) routes() *http.ServeMux {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", app.home)
-	mux.HandleFunc("/note", app.showNote)
+	"github.com/go-chi/chi"
+)
+
+func (app *application) routes() *chi.Mux {
+	mux := chi.NewRouter()
+	mux.Get("/", app.home)
+	mux.Get("/{note}", app.showNote)
+	mux.Get("/favicon.ico", app.favicon)
+
+	mux.Post("/", app.createNote)
 
 	fileServer := http.FileServer(http.Dir("ui/static"))
 	mux.Handle("/static", http.NotFoundHandler())

@@ -7,31 +7,22 @@ import (
 	"strconv"
 
 	"github.com/famusovsky/md/pkg/models"
+	"github.com/famusovsky/md/pkg/translator"
+	"github.com/go-chi/chi"
 	"github.com/shurcooL/github_flavored_markdown"
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodPost {
-		app.createNote(w, r)
-	} else if r.Method != http.MethodGet {
-		w.Header().Set("Allow", http.MethodGet)
-		app.clientError(w, http.StatusMethodNotAllowed)
-		return
-	}
-
 	app.render(w, r, "home.page.html", &templateData{})
 }
 
 func (app *application) showNote(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		w.Header().Set("Allow", http.MethodGet)
-		app.clientError(w, http.StatusMethodNotAllowed)
-		return
-	}
+	encodedId := chi.URLParam(r, "note")
 
-	// TODO get id from body
+	app.infoLog.Println("Got note request for: " + encodedId)
 
-	id, err := strconv.Atoi(r.URL.Query().Get("id"))
+	id, err := translator.Translate(encodedId)
+
 	if err != nil {
 		app.serverError(w, err)
 		return
@@ -54,12 +45,6 @@ func (app *application) showNote(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) createNote(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		w.Header().Set("Allow", http.MethodPost)
-		app.clientError(w, http.StatusMethodNotAllowed)
-		return
-	}
-
 	t := r.FormValue("text")
 	d, err := strconv.Atoi(r.FormValue("days"))
 	if err != nil {
@@ -74,8 +59,14 @@ func (app *application) createNote(w http.ResponseWriter, r *http.Request) {
 
 	app.infoLog.Printf("new note with id = %d successfully created\n", id)
 
+	encryptedId := translator.Encrypt(id)
+
 	http.Redirect(w, &http.Request{
 		Method: http.MethodGet,
 		URL:    &url.URL{Path: "/note", RawQuery: "id=" + strconv.Itoa(id)},
-	}, "/note?id="+strconv.Itoa(id), http.StatusSeeOther)
+	}, "/"+encryptedId, http.StatusSeeOther)
+}
+
+func (app *application) favicon(w http.ResponseWriter, r *http.Request) {
+	app.notFound(w)
 }
