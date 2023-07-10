@@ -1,17 +1,15 @@
 # MD pastebin
 
+Сервис, позволяющий сохранять и делиться заметками в формате [`markdown`](https://www.markdownguide.org/getting-started/)
+
 ### Для запуска проекта необходимо:
 
 1. Создать базу данных PostgreSQL
-2. Создать таблицы [(см. ниже)](#postgresql-query-для-создания-таблиц)
-3. Запустить проект
+2. Запустить проект:
 
-### PostgreSQL Query для создания таблиц
-```SQL
-CREATE TABLE notes (
-    id SERIAL NOT NULL PRIMARY KEY, 
-    content TEXT NOT NULL,
-    created TIMESTAMP NOT NULL,
-    expires TIMESTAMP NOT NULL
-);
+```bash
+go run ./cmd/web -addr=<TCP адрес проекта> -dsn=<строка подключения к бд>
+
+# addr по умолчанию = ":8080"
+# dsn по умолчанию = "port=5432 user=postgres password=qwerty dbname=MD sslmode=disable"
 ```

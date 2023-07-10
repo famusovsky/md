@@ -3,6 +3,7 @@ module github.com/famusovsky/md
 go 1.20
 
 require (
+	github.com/go-chi/chi v1.5.4
 	github.com/lib/pq v1.10.9
 	github.com/shurcooL/github_flavored_markdown v0.0.0-20210228213109-c3a9aa474629
 	github.com/stretchr/testify v1.4.0
@@ -11,7 +12,6 @@ require (
 require (
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/go-chi/chi v1.5.4 // indirect
 	github.com/gorilla/css v1.0.0 // indirect
 	github.com/microcosm-cc/bluemonday v1.0.24 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect

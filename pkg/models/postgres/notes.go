@@ -3,6 +3,7 @@ package postgres
 import (
 	"database/sql"
 	"errors"
+	"log"
 
 	"github.com/famusovsky/md/pkg/models"
 )
@@ -21,32 +22,20 @@ func GetNotesModel(db *sql.DB) (*NotesModel, error) {
 }
 
 func checkDB(db *sql.DB) error {
-	q :=
-		`SELECT EXISTS (
-		SELECT 1
-		FROM information_schema.tables
-		WHERE table_schema = 'public'
-		AND table_name = 'notes'
-	 	);`
-	var exists bool
-	db.QueryRow(q).Scan(&exists)
+	q := `CREATE TABLE IF NOT EXISTS notes (
+        id SERIAL PRIMARY KEY,
+        title TEXT NOT NULL,
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW()
+    );`
 
-	if !exists {
-		q =
-			`CREATE TABLE notes (
-			id SERIAL NOT NULL PRIMARY KEY, 
-			content TEXT NOT NULL,
-			created TIMESTAMP NOT NULL,
-			expires TIMESTAMP NOT NULL
-		);`
+	_, err := db.Exec(q)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-		_, err := db.Exec(q)
-		if err != nil {
-			return err
-		}
-	} else {
-		q =
-			`SELECT COUNT(*) = 4 AS proper
+	q =
+		`SELECT COUNT(*) = 4 AS proper
 			FROM information_schema.columns
 			WHERE table_schema = 'public'
 			AND table_name = 'notes'
@@ -56,12 +45,11 @@ func checkDB(db *sql.DB) error {
 				OR (column_name = 'created' AND data_type = 'timestamp without time zone')
 				OR (column_name = 'expires' AND data_type = 'timestamp without time zone')
 			);`
-		var proper bool
-		db.QueryRow(q).Scan(&proper)
+	var proper bool
+	db.QueryRow(q).Scan(&proper)
 
-		if !proper {
-			return errors.New("incorrect 'notes' table in the database")
-		}
+	if !proper {
+		return errors.New("incorrect 'notes' table in the database")
 	}
 
 	return nil

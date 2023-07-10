@@ -2,7 +2,7 @@ package main
 
 // TODO add tests
 
-// TODO add normal link shortaning, not just note?id=smth
+// TODO improve link shortaning, maibe make it more random
 
 import (
 	"flag"
@@ -25,7 +25,7 @@ type application struct {
 }
 
 func main() {
-	addr := flag.String("addr", ":1488", "HTTP address")
+	addr := flag.String("addr", ":8080", "HTTP address")
 	dsn := flag.String("dsn", "port=5432 user=postgres password=qwerty dbname=MD sslmode=disable", "PostgreSQL input string")
 	flag.Parse()
 
