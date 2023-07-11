@@ -6,23 +6,15 @@ package main
 
 import (
 	"flag"
-	"html/template"
 	"log"
-	"net/http"
 	"os"
-	"time"
 
+	"github.com/famusovsky/md/internal/app"
+	"github.com/famusovsky/md/internal/htmltemplates"
+	"github.com/famusovsky/md/internal/models/postgres"
 	"github.com/famusovsky/md/pkg/db"
-	"github.com/famusovsky/md/pkg/models/postgres"
 	_ "github.com/lib/pq"
 )
-
-type application struct {
-	infoLog       *log.Logger
-	errorLog      *log.Logger
-	notesModel    *postgres.NotesModel
-	templateCache map[string]*template.Template
-}
 
 func main() {
 	addr := flag.String("addr", ":8080", "HTTP address")
@@ -42,47 +34,17 @@ func main() {
 	}
 	defer dBase.Close()
 
-	cache, err := createNewTemplatesCache("ui/html/")
+	templatesCache, err := htmltemplates.CreateNewTemplatesCache("ui/html/")
 	if err != nil {
 		errorLog.Fatal(err)
 	}
 
-	infoLog.Println("templates cache is created")
-
-	model, err := postgres.GetNotesModel(dBase)
+	notesModel, err := postgres.GetNotesModel(dBase)
 	if err != nil {
 		errorLog.Fatal(err)
 	}
 
-	app := &application{
-		infoLog:       infoLog,
-		errorLog:      errorLog,
-		notesModel:    model,
-		templateCache: cache,
-	}
+	appModel := app.CreateModel(*addr, infoLog, errorLog, notesModel, templatesCache)
 
-	go func(app *application) {
-		for {
-			err := app.notesModel.Tidy()
-			if err != nil {
-				app.errorLog.Println(err)
-			} else {
-				app.infoLog.Println("data get tidied successfully")
-			}
-
-			time.Sleep(12 * time.Hour)
-		}
-	}(app)
-
-	srvr := &http.Server{
-		Addr:     *addr,
-		ErrorLog: errorLog,
-		Handler:  app.routes(),
-	}
-
-	infoLog.Printf("Start server on http://127.0.0.1%s\n", *addr)
-
-	err = srvr.ListenAndServe()
-
-	errorLog.Fatal(err)
+	appModel.Run()
 }

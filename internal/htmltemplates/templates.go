@@ -1,18 +1,18 @@
-package main
+package htmltemplates
 
 import (
 	"html/template"
 	"path/filepath"
 
-	"github.com/famusovsky/md/pkg/models"
+	"github.com/famusovsky/md/internal/models"
 )
 
-type templateData struct {
+type Data struct {
 	Note         *models.Note
 	RenderedNote string
 }
 
-func createNewTemplatesCache(dir string) (map[string]*template.Template, error) {
+func CreateNewTemplatesCache(dir string) (map[string]*template.Template, error) {
 	cache := map[string]*template.Template{}
 
 	pages, err := filepath.Glob(filepath.Join(dir, "*.page.html"))

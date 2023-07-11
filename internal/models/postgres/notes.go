@@ -5,7 +5,7 @@ import (
 	"errors"
 	"log"
 
-	"github.com/famusovsky/md/pkg/models"
+	"github.com/famusovsky/md/internal/models"
 )
 
 type NotesModel struct {

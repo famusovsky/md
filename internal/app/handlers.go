@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"errors"
@@ -6,14 +6,15 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/famusovsky/md/pkg/models"
+	"github.com/famusovsky/md/internal/htmltemplates"
+	"github.com/famusovsky/md/internal/models"
 	"github.com/famusovsky/md/pkg/translator"
 	"github.com/go-chi/chi"
 	"github.com/shurcooL/github_flavored_markdown"
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
-	app.render(w, r, "home.page.html", &templateData{})
+	app.render(w, r, "home.page.html", &htmltemplates.Data{})
 }
 
 func (app *application) showNote(w http.ResponseWriter, r *http.Request) {
@@ -42,7 +43,7 @@ func (app *application) showNote(w http.ResponseWriter, r *http.Request) {
 	unsafe := github_flavored_markdown.Markdown([]byte(note.Content))
 	rendered := string(unsafe)
 
-	app.render(w, r, "note.page.html", &templateData{Note: note, RenderedNote: rendered})
+	app.render(w, r, "note.page.html", &htmltemplates.Data{Note: note, RenderedNote: rendered})
 }
 
 func (app *application) createNote(w http.ResponseWriter, r *http.Request) {
