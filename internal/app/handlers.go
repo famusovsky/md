@@ -34,7 +34,7 @@ func (app *application) showNote(w http.ResponseWriter, r *http.Request) {
 	note, err := app.notesModel.Get(id)
 	if err != nil {
 		if errors.Is(err, models.ErrNoRecord) {
-			app.home(w, r)
+			http.Redirect(w, r, "/", http.StatusSeeOther)
 		} else {
 			app.serverError(w, err)
 		}
