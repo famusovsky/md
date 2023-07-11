@@ -1,3 +1,4 @@
+// Пакет app реализует логику приложения.
 package app
 
 import (
@@ -9,6 +10,7 @@ import (
 	"github.com/famusovsky/md/internal/models/postgres"
 )
 
+// Model - модель приложения.
 type Model struct {
 	addr          string
 	infoLog       *log.Logger
@@ -17,10 +19,19 @@ type Model struct {
 	templateCache map[string]*template.Template
 }
 
+// application - структура, которая хранит в себе модель приложения.
 type application struct {
 	*Model
 }
 
+// CreateModel - создание модели приложения.
+// Параметры:
+// addr - адрес сервера,
+// infoLog - логгер информационных сообщений,
+// errorLog - логгер ошибок,
+// notesModel - модель базы данных заметок,
+// templateCache - кэш шаблонов.
+// Возвращает модель приложения.
 func CreateModel(addr string, infoLog *log.Logger, errorLog *log.Logger,
 	notesModel *postgres.NotesModel, templateCache map[string]*template.Template) *Model {
 	return &Model{
@@ -32,11 +43,15 @@ func CreateModel(addr string, infoLog *log.Logger, errorLog *log.Logger,
 	}
 }
 
+// Run - запуск приложения.
+// Принимает модель приложения.
 func (model *Model) Run() {
+	// Создание приложения на основе модели.
 	app := &application{
 		Model: model,
 	}
 
+	// Запуск процесса очистки базы данных от устаревших данных.
 	go func(app *application) {
 		for {
 			err := app.notesModel.Tidy()
@@ -50,13 +65,12 @@ func (model *Model) Run() {
 		}
 	}(app)
 
+	// Создание и запуск сервера.
 	srvr := &http.Server{
 		Addr:     app.addr,
 		ErrorLog: app.errorLog,
 		Handler:  app.routes(),
 	}
-
-	// app.infoLog.Printf("Start server on http://127.0.0.1%s\n", app.addr)
 
 	err := srvr.ListenAndServe()
 

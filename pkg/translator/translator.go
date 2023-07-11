@@ -1,3 +1,4 @@
+// Пакет translator реализует функции для перевода числа в строку и обратно.
 package translator
 
 import (
@@ -9,6 +10,9 @@ const alphabet = "ynAJfoSgdXHB5VasEMtcbPCr1uNZ4LG723ehWkvwYR6KpxjTm8iQUFqz9D"
 
 var alphabetLen = len(alphabet)
 
+// Translate - переводит строку в число.
+// Принимает строку.
+// Возвращает число и ошибку.
 func Translate(s string) (int, error) {
 	if s == "" {
 		return 0, errors.New("empty string")
@@ -27,6 +31,9 @@ func Translate(s string) (int, error) {
 	return result, nil
 }
 
+// Encrypt - переводит число в строку.
+// Принимает число.
+// Возвращает строку.
 func Encrypt(id int) string {
 	var result string
 

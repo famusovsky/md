@@ -13,10 +13,12 @@ import (
 	"github.com/shurcooL/github_flavored_markdown"
 )
 
+// home - обработчик главной страницы.
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	app.render(w, r, "home.page.html", &htmltemplates.Data{})
 }
 
+// showNote - обработчик страницы заметки.
 func (app *application) showNote(w http.ResponseWriter, r *http.Request) {
 	encodedId := chi.URLParam(r, "note")
 
@@ -32,7 +34,6 @@ func (app *application) showNote(w http.ResponseWriter, r *http.Request) {
 	note, err := app.notesModel.Get(id)
 	if err != nil {
 		if errors.Is(err, models.ErrNoRecord) {
-			// app.notFound(w)
 			app.home(w, r)
 		} else {
 			app.serverError(w, err)
@@ -46,6 +47,7 @@ func (app *application) showNote(w http.ResponseWriter, r *http.Request) {
 	app.render(w, r, "note.page.html", &htmltemplates.Data{Note: note, RenderedNote: rendered})
 }
 
+// createNote - обработчик создания заметки.
 func (app *application) createNote(w http.ResponseWriter, r *http.Request) {
 	t := r.FormValue("text")
 	d, err := strconv.Atoi(r.FormValue("days"))
@@ -69,6 +71,7 @@ func (app *application) createNote(w http.ResponseWriter, r *http.Request) {
 	}, "/"+encryptedId, http.StatusSeeOther)
 }
 
+// favicon - заглушка обработчика запроса на иконку.
 func (app *application) favicon(w http.ResponseWriter, r *http.Request) {
 	app.notFound(w)
 }

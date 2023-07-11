@@ -1,3 +1,4 @@
+// Пакет htmltemplates предоставляет функции для работы с шаблонами страниц заметок.
 package htmltemplates
 
 import (
@@ -7,12 +8,16 @@ import (
 	"github.com/famusovsky/md/internal/models"
 )
 
+// Data - структура, которая хранит в себе данные для шаблона страницы заметки.
 type Data struct {
 	Note         *models.Note
 	RenderedNote string
 }
 
-func CreateNewTemplatesCache(dir string) (map[string]*template.Template, error) {
+// CreateNewCache - создание нового кэша шаблонов.
+// Параметр dir - путь к директории с шаблонами.
+// Возвращает кэш шаблонов и ошибку.
+func CreateNewCache(dir string) (map[string]*template.Template, error) {
 	cache := map[string]*template.Template{}
 
 	pages, err := filepath.Glob(filepath.Join(dir, "*.page.html"))

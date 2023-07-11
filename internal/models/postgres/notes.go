@@ -1,3 +1,4 @@
+// Пакет postgres реализует взаимодействие с базой данных PostgreSQL, хранящей данные из пакета models.
 package postgres
 
 import (
@@ -8,10 +9,14 @@ import (
 	"github.com/famusovsky/md/internal/models"
 )
 
+// NotesModel - модель базы данных заметок.
 type NotesModel struct {
 	db *sql.DB
 }
 
+// GetNotesModel - создание модели базы данных заметок.
+// Принимает базу данных.
+// Возвращает модель базы данных заметок и ошибку.
 func GetNotesModel(db *sql.DB) (*NotesModel, error) {
 	err := checkDB(db)
 	if err != nil {
@@ -21,6 +26,7 @@ func GetNotesModel(db *sql.DB) (*NotesModel, error) {
 	return &NotesModel{db}, nil
 }
 
+// createDB - создание базы данных заметок.
 func createDB(db *sql.DB) error {
 	q := `CREATE TABLE notes (
         id SERIAL NOT NULL PRIMARY KEY, 
@@ -37,6 +43,7 @@ func createDB(db *sql.DB) error {
 	return nil
 }
 
+// checkDB - проверка базы данных заметок.
 func checkDB(db *sql.DB) error {
 	q :=
 		`SELECT COUNT(*) = 4 AS proper
@@ -69,6 +76,9 @@ func checkDB(db *sql.DB) error {
 	return nil
 }
 
+// Get - получение заметки по id.
+// Принимает id заметки.
+// Возвращает модель заметки и ошибку.
 func (m *NotesModel) Get(id int) (*models.Note, error) {
 	q :=
 		`SELECT Content, Created, Expires FROM notes 
@@ -87,6 +97,9 @@ func (m *NotesModel) Get(id int) (*models.Note, error) {
 	return note, nil
 }
 
+// Add - добавление заметки.
+// Принимает текст заметки и количество дней до истечения срока действия заметки.
+// Возвращает id заметки и ошибку.
 func (m *NotesModel) Add(text string, daysTillExpire int) (int, error) {
 	q :=
 		`INSERT INTO notes (content, created, expires) VALUES (
@@ -104,6 +117,7 @@ func (m *NotesModel) Add(text string, daysTillExpire int) (int, error) {
 	return id, nil
 }
 
+// delete - удаление заметки по id.
 func (m *NotesModel) delete(id int) error {
 	q :=
 		`DELETE FROM notes
@@ -117,6 +131,8 @@ func (m *NotesModel) delete(id int) error {
 	return nil
 }
 
+// Tidy - удаление просроченных заметок.
+// Возвращает ошибку.
 func (m *NotesModel) Tidy() error {
 	q :=
 		`SELECT id FROM notes

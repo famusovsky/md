@@ -7,6 +7,7 @@ import (
 	"github.com/go-chi/chi/middleware"
 )
 
+// routes - создание маршрутов.
 func (app *application) routes() *chi.Mux {
 	mux := chi.NewRouter()
 
