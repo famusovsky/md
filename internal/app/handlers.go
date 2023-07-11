@@ -41,10 +41,9 @@ func (app *application) showNote(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	unsafe := github_flavored_markdown.Markdown([]byte(note.Content))
-	rendered := string(unsafe)
+	rendered := github_flavored_markdown.Markdown([]byte(note.Content))
 
-	app.render(w, r, "note.page.html", &htmltemplates.Data{Note: note, RenderedNote: rendered})
+	app.render(w, r, "note.page.html", &htmltemplates.Data{Note: note, RenderedNote: string(rendered)})
 }
 
 // createNote - обработчик создания заметки.

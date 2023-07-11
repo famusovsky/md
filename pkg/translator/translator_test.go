@@ -7,8 +7,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestEncrypt(t *testing.T) {
-	t.Run("returns an alphanumeric short identifier", func(t *testing.T) {
+func Test_Encrypt(t *testing.T) {
+	t.Run("returns a string identifier", func(t *testing.T) {
 		type testCase struct {
 			id       int
 			expected string
@@ -17,11 +17,11 @@ func TestEncrypt(t *testing.T) {
 		testCases := []testCase{
 			{
 				id:       1024,
-				expected: "yyyMv",
+				expected: "Mv",
 			},
 			{
 				id:       0,
-				expected: "yyyyy",
+				expected: "y",
 			},
 		}
 
@@ -34,12 +34,12 @@ func TestEncrypt(t *testing.T) {
 	t.Run("is idempotent", func(t *testing.T) {
 		for i := 0; i < 100; i++ {
 			res := translator.Encrypt(1024)
-			assert.Equal(t, "yyyMv", res)
+			assert.Equal(t, "Mv", res)
 		}
 	})
 }
 
-func TestTranslate(t *testing.T) {
+func Test_Translate(t *testing.T) {
 	t.Run("returns an integer identifier", func(t *testing.T) {
 		type testCase struct {
 			str      string
@@ -48,11 +48,11 @@ func TestTranslate(t *testing.T) {
 
 		testCases := []testCase{
 			{
-				str:      "yyyMv",
+				str:      "Mv",
 				expected: 1024,
 			},
 			{
-				str:      "yyyyy",
+				str:      "y",
 				expected: 0,
 			},
 		}
@@ -68,7 +68,7 @@ func TestTranslate(t *testing.T) {
 
 	t.Run("is idempotent", func(t *testing.T) {
 		for i := 0; i < 100; i++ {
-			res, err := translator.Translate("yyyMv")
+			res, err := translator.Translate("Mv")
 			if err != nil {
 				t.Error()
 			}

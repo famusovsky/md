@@ -35,16 +35,16 @@ func Translate(s string) (int, error) {
 // Принимает число.
 // Возвращает строку.
 func Encrypt(id int) string {
+	if id == 0 {
+		return string(alphabet[0])
+	}
+
 	var result string
 
 	for id > 0 {
 		result = string(alphabet[id%alphabetLen]) + result
 		id = id / alphabetLen
 	}
-
-	// for len(result) < 5 {
-	// 	result = string(alphabet[0]) + result
-	// }
 
 	return result
 }
