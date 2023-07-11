@@ -1,13 +1,11 @@
 package app
 
 import (
-	"errors"
 	"net/http"
 	"net/url"
 	"strconv"
 
 	"github.com/famusovsky/md/internal/htmltemplates"
-	"github.com/famusovsky/md/internal/models"
 	"github.com/famusovsky/md/pkg/translator"
 	"github.com/go-chi/chi"
 	"github.com/shurcooL/github_flavored_markdown"
@@ -33,11 +31,7 @@ func (app *application) showNote(w http.ResponseWriter, r *http.Request) {
 
 	note, err := app.notesModel.Get(id)
 	if err != nil {
-		if errors.Is(err, models.ErrNoRecord) {
-			http.Redirect(w, r, "/", http.StatusSeeOther)
-		} else {
-			app.serverError(w, err)
-		}
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
