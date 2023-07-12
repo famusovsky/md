@@ -6,10 +6,8 @@
 {{with .Note}}
 <dd>
     <button id='toggleButton' onclick='toggleContent()'>Pure Text</button>
-    <div class='metadata'>
-        <time>Created: {{.Created.Format "02-01-2006"}}</time> | <time>Expires: {{.Expires.Format "02-01-2006"}}</time>
-    </div>
 </dd>
+<br>
 <div class='note'>
     <div id='renderedContent' style='display: block;'>
         <div class='markdown-body'>
@@ -23,8 +21,14 @@
                 </p></pre>
         </div>
     </div>
-    <br>
 </div>
+<br>
+<dd>
+    <div class='metadata'>
+        <time>Created: {{.Created.Format "02-01-2006"}}</time> | <time>Expires: {{.Expires.Format "02-01-2006"}}</time>
+    </div>
+</dd>
+<br>
 
 <script>
     function toggleContent() {
