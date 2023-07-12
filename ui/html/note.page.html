@@ -1,28 +1,28 @@
 {{template "base" .}}
 
-<!-- TODO add copy link button -->
-
 {{define "title"}}Note #{{.Note.ID}}{{end}}
 
 {{define "main"}}
 {{with .Note}}
-<div class='note'>
+<dd>
     <button id='toggleButton' onclick='toggleContent()'>Pure Text</button>
     <div class='metadata'>
         <time>Created: {{.Created.Format "02-01-2006"}}</time> | <time>Expires: {{.Expires.Format "02-01-2006"}}</time>
     </div>
-    <main id='renderedContent' style='display: block;'>
+</dd>
+<div class='note'>
+    <div id='renderedContent' style='display: block;'>
         <div class='markdown-body'>
             {{template "renderedNote" .}}
         </div>
-    </main>
-    <main id='pureContent' style='display: none;'>
+    </div>
+    <div id='pureContent' style='display: none;'>
         <div class='pure-body'>
-            <pre>
-                <p>{{.Content}}</p>
-            </pre>
+            <pre><p>
+                    {{.Content}}
+                </p></pre>
         </div>
-    </main>
+    </div>
     <br>
 </div>
 

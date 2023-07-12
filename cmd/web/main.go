@@ -1,5 +1,7 @@
 package main
 
+// TODO implement mobile version
+
 // TODO add tests
 
 // TODO improve link shortaning, maibe make it more random
