@@ -60,11 +60,14 @@ func (app *application) createNote(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, &http.Request{
 		Method: http.MethodGet,
-		URL:    &url.URL{Path: "/note", RawQuery: "id=" + strconv.Itoa(id)},
+		URL:    &url.URL{Path: "/", RawQuery: encryptedId},
 	}, "/"+encryptedId, http.StatusSeeOther)
 }
 
-// favicon - заглушка обработчика запроса на иконку.
+// favicon - обработчик запроса на иконку.
 func (app *application) favicon(w http.ResponseWriter, r *http.Request) {
-	app.notFound(w)
+	http.Redirect(w, &http.Request{
+		Method: http.MethodGet,
+		URL:    &url.URL{Path: "/static/images/favicon.ico"},
+	}, "/static/images/favicon.ico", http.StatusSeeOther)
 }
