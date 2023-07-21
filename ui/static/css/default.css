@@ -1,6 +1,5 @@
 * {
     box-sizing: border-box;
-    font-size: medium;
     font-family: 'Roboto', 'Arial', 'sans-serif';
 }
 
@@ -24,18 +23,11 @@ main {
     height: 100%;
 }
 
-dd,
-main {
-    margin-left: 12%;
-    margin-right: 12%;
-}
-
 select,
 label,
 .metadata {
     color: #777;
 }
-
 
 a,
 input[type="submit"] {
@@ -43,7 +35,6 @@ input[type="submit"] {
     text-decoration: none;
     background: none;
     border: none;
-    font-size: large;
 }
 
 a:hover,
@@ -74,7 +65,6 @@ textarea,
     border-radius: 3%;
     padding: 5%;
     overflow-y: auto;
-    height: 80%;
 }
 
 .go a {
@@ -97,16 +87,78 @@ footer {
     bottom: 0%;
 }
 
-footer .go {
-    font-size: large;
-}
-
 footer,
 nav {
-    padding-bottom: 3%;
-    padding-top: 2%;
     height: 1%;
-    font-size: large;
     background: #FFFFFF;
     color: #6A6C6F;
+}
+
+/* Media Queries for Desktop Devices */
+
+@media (pointer: fine),
+(pointer: none) {
+    * {
+        font-size: medium;
+    }
+
+    main,
+    dd {
+        margin-left: 12%;
+        margin-right: 12%;
+    }
+
+    textarea,
+    .note {
+        height: 80%;
+    }
+
+    a,
+    label,
+    select,
+    input[type="submit"],
+    footer,
+    nav {
+        font-size: large;
+    }
+
+    footer,
+    nav {
+        padding-bottom: 3%;
+        padding-top: 2%;
+    }
+}
+
+/* Media Queries for Mobile Devices */
+
+@media (pointer: coarse) {
+    * {
+        font-size: 1.5rem;
+    }
+
+    main,
+    dd {
+        margin-left: 2%;
+        margin-right: 2%;
+    }
+
+    textarea,
+    .note {
+        height: 70%;
+    }
+
+    a,
+    label,
+    select,
+    input[type="submit"],
+    footer,
+    nav {
+        font-size: 2rem;
+    }
+
+    footer,
+    nav {
+        padding-bottom: 9%;
+        padding-top: 4%;
+    }
 }
